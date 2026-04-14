@@ -12,6 +12,7 @@ M.config = {
 		enable = true,
 		cmd = "c3fmt",
 		format_on_save = false,
+		config_file = nil,
 	},
 	highlighting = {
 		enable_treesitter = true,
@@ -57,11 +58,23 @@ function M.format()
 		return
 	end
 
+	-- Pass buffer by stdin/stdout instead of filename so that the user does
+	-- not have to save before formatting
 	local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
 	local input = table.concat(lines, "\n")
 
-	local output = vim.fn.system({ cmd_path, "--stdin", "--stdout" }, input)
+	-- Check if user config specifies a config file
+	local cmd_args = { cmd_path, "--stdin", "--stdout" }
+	if M.config.formatter.config_file then
+		local config_path = tostring(M.config.formatter.config_file)
+		config_path = vim.fs.abspath(config_path)
+		table.insert(cmd_args, "--config=" .. config_path)
+	end
 
+	-- Format the file
+	local output = vim.fn.system(cmd_args, input)
+
+	-- Write the formatted output back in the buffer
 	if vim.v.shell_error == 0 and output ~= "" then
 		local view = vim.fn.winsaveview()
 		local new_lines = vim.split(output, "\n")
