@@ -100,9 +100,14 @@ require("c3").setup({
     enable = true, -- Set to false to disable formatter
     cmd = "c3fmt",
     format_on_save = false,
+    config_file = nil, -- Path to `.c3fmt` config file (1)
   },
   highlighting = {
     enable_treesitter = true,
   }
 })
 ```
+
+- *(1): See [c3fmt configuration](https://github.com/lmichaudel/c3fmt?tab=readme-ov-file#configuration)*
+    for more info, when using a relative path this will be resolved from nvim's
+    current working directory (see `:pwd`)
