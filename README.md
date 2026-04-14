@@ -1,6 +1,6 @@
 # c3.nvim
 
-<img src="https://c3-lang.org/logo.svg" align="right" height="120" />
+<img src="logo.svg" align="right" height="120" />
 
 Support for [C3](https://c3-lang.org) in Neovim.
 
